@@ -5,7 +5,7 @@ import { Camera, FileText, Loader2, AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
 // API URL configuration
-const API_URL = process.env.NEXT_PUBLIC_API_URL || ''http://44.194.4.197'';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://44.194.4.197';
 
 const VideoSummarizer = () => {
   const [url, setUrl] = useState('');
