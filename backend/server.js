@@ -15,7 +15,7 @@ const __dirname = dirname(__filename);
 
 const corsOptions = {
   origin: [
-    process.env.FRONTEND_URL || 'https://summarizer-012525-new.vercel.app/',
+    process.env.FRONTEND_URL || 'https://summarizer-012525-new-8fev.vercel.app',
     'http://localhost:3000'
   ],
   methods: ['GET', 'POST', 'OPTIONS'],
@@ -27,8 +27,7 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Middleware
-/// 012525 version 1 app.use(cors(corsOptions));
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Ensure temp directory exists
@@ -75,19 +74,17 @@ const cleanup = async (filePath) => {
 // Improved audio download function using youtube-dl-exec
 const downloadAudio = async (url, outputPath) => {
   try {
-    const ytDlpPath = path.join(__dirname, 'bin', 'yt-dlp.exe');
+    const ytDlpPath = path.join(__dirname, 'bin', 'yt-dlp');
+    const cookiesPath = path.join(__dirname, 'cookie.txt');
     
-    // Ensure yt-dlp.exe exists in the expected path
     if (!fs.existsSync(ytDlpPath)) {
-      throw new Error('yt-dlp.exe not found in bin directory. Please download it first.');
+      throw new Error('yt-dlp not found in bin directory. Please download it first.');
     }
 
     console.log('yt-dlp path:', ytDlpPath);
 
-    // Create a new instance of youtube-dl-exec with the binary path
     const yt = youtubeDl.create(ytDlpPath);
 
-    // Execute the download with the correct options
     await yt(url, {
       extractAudio: true,
       audioFormat: 'mp3',
@@ -96,6 +93,7 @@ const downloadAudio = async (url, outputPath) => {
       noCheckCertificates: true,
       noWarnings: true,
       preferFreeFormats: true,
+      cookies: cookiesPath,
       addHeader: [
         'referer:youtube.com',
         'user-agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
