@@ -187,11 +187,11 @@ const VideoSummarizer = () => {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-sm text-gray-600">
             <div className="flex items-center gap-2">
               <Mail className="h-4 w-4 text-indigo-600" />
-              <span>alokdahal5@gmail.com</span>
+              <span>sentiment2025@gmail.com</span>
             </div>
             <div className="flex items-center gap-2">
               <Phone className="h-4 w-4 text-purple-600" />
-              <span>+1 617-863-7555</span>
+              <span>617-XXX-XXX</span>
             </div>
             <div className="flex items-center gap-2">
               <MapPin className="h-4 w-4 text-amber-600" />
