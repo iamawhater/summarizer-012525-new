@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, FormEvent } from 'react';
-import { FileText, Loader2, Sparkles, ArrowRight, Play, Star, Zap } from 'lucide-react';
+import { FileText, Loader2, Sparkles, Play, Star, Zap, Mail, Phone, MapPin } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const VideoSummarizer = () => {
@@ -16,8 +16,8 @@ const VideoSummarizer = () => {
     setError('');
     setSummary('');
     
-    const baseUrl = process.env.API_URL 
-      ? `${process.env.API_URL.replace(/\/+$/, '')}/api/summarize`
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL 
+      ? `${process.env.NEXT_PUBLIC_API_URL.replace(/\/+$/, '')}/api/summarize`
       : '/api/summarize';
     
     try {
@@ -71,7 +71,7 @@ const VideoSummarizer = () => {
         <div className="max-w-7xl mx-auto py-4 px-4">
           <div className="flex items-center justify-center gap-3 text-sm font-medium">
             <Star className="h-5 w-5 text-yellow-300 animate-spin-slow" />
-            <span className="text-base">Presented by Alok Dahal</span>
+            <span className="text-base">Brought to you by SentimentAI. Created by Alok Dahal</span>
           </div>
         </div>
       </div>
@@ -161,7 +161,7 @@ const VideoSummarizer = () => {
                   Video Summary
                 </h2>
                 <div className="space-y-4">
-                  <ol className="list-decimal list-inside space-y-4">
+                  <ul className="list-disc list-inside space-y-4">
                     {summary.split('\n').map((point, index) => (
                       <li key={index} className="group">
                         <div className="inline-block ml-2">
@@ -171,13 +171,33 @@ const VideoSummarizer = () => {
                         </div>
                       </li>
                     ))}
-                  </ol>
+                  </ul>
                 </div>
               </div>
             </div>
           )}
         </div>
       </main>
+
+      {/* Simplified Contact Section */}
+      <footer className="bg-white/90 backdrop-blur-2xl border-t border-indigo-50 py-6">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 text-sm text-gray-600">
+            <div className="flex items-center gap-2">
+              <Mail className="h-4 w-4 text-indigo-600" />
+              <span>alokdahal5@gmail.com</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Phone className="h-4 w-4 text-purple-600" />
+              <span>+1 617-863-7555</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <MapPin className="h-4 w-4 text-amber-600" />
+              <span>Boston, MA </span>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
