@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, useEffect, useRef } from 'react';
 import { FileText, Loader2, Sparkles, Play, Star, Zap, Mail, Phone, MapPin } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
@@ -9,6 +9,7 @@ const VideoSummarizer = () => {
   const [loading, setLoading] = useState(false);
   const [summary, setSummary] = useState('');
   const [error, setError] = useState('');
+  const summaryRef = useRef<HTMLDivElement>(null); // Ref for the summary section
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -57,6 +58,13 @@ const VideoSummarizer = () => {
       setLoading(false);
     }
   };
+
+  // Auto-scroll to summary when it is generated
+  useEffect(() => {
+    if (summary && summaryRef.current) {
+      summaryRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [summary]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-amber-50 relative">
@@ -156,24 +164,25 @@ const VideoSummarizer = () => {
           )}
 
           {summary && (
-            <div className="max-w-3xl mx-auto mt-8 sm:mt-12">
+            <div ref={summaryRef} className="max-w-3xl mx-auto mt-8 sm:mt-12">
               <div className="bg-white/90 backdrop-blur-2xl rounded-3xl shadow-2xl border border-indigo-50 p-6 sm:p-8">
                 <h2 className="text-2xl font-semibold mb-6 text-gray-900 flex items-center gap-2">
                   <FileText className="h-6 w-6 text-indigo-600" />
                   Video Summary
                 </h2>
                 <div className="space-y-4">
-                  <ul className="list-disc list-inside space-y-4">
+                  {/* Remove bullet points by replacing <ul> and <li> with <div> */}
+                  <div className="space-y-4">
                     {summary.split('\n').map((point, index) => (
-                      <li key={index} className="group">
+                      <div key={index} className="group">
                         <div className="inline-block ml-2">
                           <p className="text-gray-700 leading-relaxed">
                             {point.replace(/^\d+[\s.-]*/, '').trim()}
                           </p>
                         </div>
-                      </li>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                 </div>
               </div>
             </div>
@@ -187,11 +196,11 @@ const VideoSummarizer = () => {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-sm text-gray-600">
             <div className="flex items-center gap-2">
               <Mail className="h-4 w-4 text-indigo-600" />
-              <span>sentiment2025@gmail.com</span>
+              <span>alokdahal5@gmail.com</span>
             </div>
             <div className="flex items-center gap-2">
               <Phone className="h-4 w-4 text-purple-600" />
-              <span>617-XXX-XXX</span>
+              <span>+1 617-863-7555</span>
             </div>
             <div className="flex items-center gap-2">
               <MapPin className="h-4 w-4 text-amber-600" />
