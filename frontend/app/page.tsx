@@ -78,16 +78,18 @@ const VideoSummarizer = () => {
 
       <main className="relative max-w-7xl mx-auto px-4 pt-20 pb-16">
         <div className="text-center">
-          <h1 className="text-8xl font-black bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-purple-600 to-amber-600 mb-6 tracking-tight">
+          {/* Responsive Title */}
+          <h1 className="text-6xl sm:text-8xl font-black bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-purple-600 to-amber-600 mb-6 tracking-tight">
             VideoSynth
           </h1>
-          <p className="text-2xl text-gray-600 mb-16 font-light">
+          {/* Responsive Subtitle */}
+          <p className="text-xl sm:text-2xl text-gray-600 mb-8 sm:mb-16 font-light">
             Transform Video Content into Brilliant Insights
           </p>
 
           {/* Main Input Section */}
-          <div className="max-w-2xl mx-auto transform hover:scale-102 transition-all duration-300">
-            <div className="bg-white/90 backdrop-blur-2xl rounded-3xl shadow-2xl border border-indigo-50 p-8">
+          <div className="max-w-2xl mx-auto transform hover:scale-102 transition-all duration-300 sm:px-4">
+            <div className="bg-white/90 backdrop-blur-2xl rounded-3xl shadow-2xl border border-indigo-50 p-6 sm:p-8">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="relative group">
                   <input
@@ -96,7 +98,7 @@ const VideoSummarizer = () => {
                     onChange={(e) => setUrl(e.target.value)}
                     placeholder="Paste your YouTube URL here"
                     pattern="^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$"
-                    className="w-full px-6 py-4 text-lg rounded-2xl border-2 border-indigo-100 bg-white/80 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 pr-12"
+                    className="w-full px-4 sm:px-6 py-3 sm:py-4 text-base sm:text-lg rounded-2xl border-2 border-indigo-100 bg-white/80 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 pr-12"
                     required
                   />
                   <Play className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-indigo-400 group-hover:text-indigo-600 transition-colors duration-300" />
@@ -104,7 +106,7 @@ const VideoSummarizer = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full inline-flex justify-center items-center px-6 py-4 rounded-2xl text-white bg-gradient-to-r from-indigo-600 via-purple-600 to-amber-600 hover:from-indigo-700 hover:via-purple-700 hover:to-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-lg font-medium shadow-xl hover:shadow-2xl"
+                  className="w-full inline-flex justify-center items-center px-4 sm:px-6 py-3 sm:py-4 rounded-2xl text-white bg-gradient-to-r from-indigo-600 via-purple-600 to-amber-600 hover:from-indigo-700 hover:via-purple-700 hover:to-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-base sm:text-lg font-medium shadow-xl hover:shadow-2xl"
                 >
                   {loading ? (
                     <>
@@ -118,8 +120,8 @@ const VideoSummarizer = () => {
               </form>
             </div>
 
-            {/* Feature Cards */}
-            <div className="grid md:grid-cols-3 gap-6 mt-12">
+            {/* Feature Cards - Responsive Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8 sm:mt-12">
               <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-indigo-50 p-6 hover:shadow-2xl transition-all duration-300">
                 <div className="rounded-xl bg-indigo-50 p-3 inline-block mb-4">
                   <Zap className="h-6 w-6 text-indigo-600" />
@@ -154,8 +156,8 @@ const VideoSummarizer = () => {
           )}
 
           {summary && (
-            <div className="max-w-3xl mx-auto mt-12">
-              <div className="bg-white/90 backdrop-blur-2xl rounded-3xl shadow-2xl border border-indigo-50 p-8">
+            <div className="max-w-3xl mx-auto mt-8 sm:mt-12">
+              <div className="bg-white/90 backdrop-blur-2xl rounded-3xl shadow-2xl border border-indigo-50 p-6 sm:p-8">
                 <h2 className="text-2xl font-semibold mb-6 text-gray-900 flex items-center gap-2">
                   <FileText className="h-6 w-6 text-indigo-600" />
                   Video Summary
@@ -182,7 +184,7 @@ const VideoSummarizer = () => {
       {/* Simplified Contact Section */}
       <footer className="bg-white/90 backdrop-blur-2xl border-t border-indigo-50 py-6">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 text-sm text-gray-600">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-sm text-gray-600">
             <div className="flex items-center gap-2">
               <Mail className="h-4 w-4 text-indigo-600" />
               <span>alokdahal5@gmail.com</span>
