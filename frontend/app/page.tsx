@@ -16,8 +16,8 @@ const VideoSummarizer = () => {
     setError('');
     setSummary('');
     
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL 
-      ? `${process.env.NEXT_PUBLIC_API_URL.replace(/\/+$/, '')}/api/summarize`
+    const baseUrl = process.env.API_URL 
+      ? `${process.env.API_URL.replace(/\/+$/, '')}/api/summarize`
       : '/api/summarize';
     
     try {
