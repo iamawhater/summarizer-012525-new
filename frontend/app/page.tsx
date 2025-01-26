@@ -4,8 +4,6 @@ import { useState, FormEvent } from 'react';
 import { FileText, Loader2, Sparkles, ArrowRight } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
-const API_URL = '/api';
-
 const VideoSummarizer = () => {
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
@@ -19,7 +17,7 @@ const VideoSummarizer = () => {
     setSummary('');
 
     try {
-      const response = await fetch(`${NEXT_PUBLIC_API_URL}/summarize`, {
+      const response = await fetch(`/api/summarize`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
