@@ -28,7 +28,26 @@ const VideoSummarizer = () => {
       });
   
       console.log('Response status:', response.status); 
-   
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || `Failed to summarize video (${response.status})`);
+      }
+
+      setSummary(data.summary);
+    } catch (error: unknown) {
+      console.error('Error details:', error);
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('An unknown error occurred');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 relative">
       {/* Decorative Elements */}
