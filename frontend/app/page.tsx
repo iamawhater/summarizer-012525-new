@@ -15,11 +15,16 @@ const VideoSummarizer = () => {
     setLoading(true);
     setError('');
     setSummary('');
-  
-    console.log('Sending request to:', '/api/summarize');
+    
+    // Get the base URL from environment variable or use relative path
+    const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL 
+      ? `${process.env.NEXT_PUBLIC_BACKEND_URL.replace(/\/+$/, '')}/api/summarize`
+      : '/api/summarize';
+    
+    console.log('Sending request to:', baseUrl);
   
     try {
-      const response = await fetch(`/api/summarize`, {
+      const response = await fetch(baseUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -27,12 +32,23 @@ const VideoSummarizer = () => {
         body: JSON.stringify({ url }),
       });
   
-      console.log('Response status:', response.status); 
-
+      console.log('Response status:', response.status);
+      
       const data = await response.json();
       
       if (!response.ok) {
-        throw new Error(data.error || `Failed to summarize video (${response.status})`);
+        let errorMessage = data.error || `Failed to summarize video (${response.status})`;
+        
+        // Enhanced error messages for common issues
+        if (response.status === 500) {
+          errorMessage = 'Server is currently experiencing issues. Please try again in a few minutes. If the problem persists, ensure your YouTube video URL is correct and accessible.';
+        } else if (response.status === 404) {
+          errorMessage = 'The video could not be found. Please check the URL and try again.';
+        } else if (response.status === 429) {
+          errorMessage = 'Too many requests. Please wait a moment before trying again.';
+        }
+        
+        throw new Error(errorMessage);
       }
 
       setSummary(data.summary);
@@ -85,6 +101,7 @@ const VideoSummarizer = () => {
                     value={url}
                     onChange={(e) => setUrl(e.target.value)}
                     placeholder="Enter YouTube video URL"
+                    pattern="^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$"
                     className="w-full px-6 py-4 text-lg rounded-xl border border-gray-200 bg-white/90 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 pr-12"
                     required
                   />
