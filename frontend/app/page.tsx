@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, FormEvent } from 'react';
-import { FileText, Loader2, Sparkles, ArrowRight } from 'lucide-react';
+import React, { useState, FormEvent } from 'react';
+import { FileText, Loader2, Sparkles, ArrowRight, Play, Star, Zap } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const VideoSummarizer = () => {
@@ -16,13 +16,10 @@ const VideoSummarizer = () => {
     setError('');
     setSummary('');
     
-    // Get the base URL from environment variable or use relative path
     const baseUrl = process.env.NEXT_PUBLIC_API_URL 
       ? `${process.env.NEXT_PUBLIC_API_URL.replace(/\/+$/, '')}/api/summarize`
       : '/api/summarize';
     
-    console.log('Sending request to:', baseUrl);
-  
     try {
       const response = await fetch(baseUrl, {
         method: 'POST',
@@ -31,15 +28,12 @@ const VideoSummarizer = () => {
         },
         body: JSON.stringify({ url }),
       });
-  
-      console.log('Response status:', response.status);
       
       const data = await response.json();
       
       if (!response.ok) {
         let errorMessage = data.error || `Failed to summarize video (${response.status})`;
         
-        // Enhanced error messages for common issues
         if (response.status === 500) {
           errorMessage = 'Server is currently experiencing issues. Please try again in a few minutes. If the problem persists, ensure your YouTube video URL is correct and accessible.';
         } else if (response.status === 404) {
@@ -65,52 +59,52 @@ const VideoSummarizer = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 relative">
-      {/* Decorative Elements */}
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-amber-50 relative">
+      {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-100 rounded-full mix-blend-multiply filter blur-xl opacity-70" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-100 rounded-full mix-blend-multiply filter blur-xl opacity-70" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-100 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-pulse" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-amber-100 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-pulse" />
       </div>
 
-      {/* Top Banner */}
-      <div className="relative bg-gradient-to-r from-blue-600 to-blue-700 text-white">
-        <div className="max-w-7xl mx-auto py-3 px-4">
-          <div className="flex items-center justify-center gap-2 text-sm font-medium">
-            <Sparkles className="h-4 w-4" />
-            <span>Now powered by advanced AI technology for better summaries</span>
+      {/* Hero Banner */}
+      <div className="relative bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
+        <div className="max-w-7xl mx-auto py-4 px-4">
+          <div className="flex items-center justify-center gap-3 text-sm font-medium">
+            <Star className="h-5 w-5 text-yellow-300 animate-spin-slow" />
+            <span className="text-base">Presented by Alok Dahal</span>
           </div>
         </div>
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 pt-24 pb-16">
+      <main className="relative max-w-7xl mx-auto px-4 pt-20 pb-16">
         <div className="text-center">
-          <h1 className="text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 mb-6 tracking-tight">
+          <h1 className="text-8xl font-black bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-purple-600 to-amber-600 mb-6 tracking-tight">
             VideoSynth
           </h1>
-          <p className="text-2xl text-gray-600 mb-16">
-            Into the insights
+          <p className="text-2xl text-gray-600 mb-16 font-light">
+            Transform Video Content into Brilliant Insights
           </p>
 
-          {/* Main Form */}
-          <div className="max-w-2xl mx-auto">
-            <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-100 p-8 hover:shadow-2xl transition-all duration-300">
+          {/* Main Input Section */}
+          <div className="max-w-2xl mx-auto transform hover:scale-102 transition-all duration-300">
+            <div className="bg-white/90 backdrop-blur-2xl rounded-3xl shadow-2xl border border-indigo-50 p-8">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="relative group">
                   <input
                     type="url"
                     value={url}
                     onChange={(e) => setUrl(e.target.value)}
-                    placeholder="Enter YouTube video URL"
+                    placeholder="Paste your YouTube URL here"
                     pattern="^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$"
-                    className="w-full px-6 py-4 text-lg rounded-xl border border-gray-200 bg-white/90 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 pr-12"
+                    className="w-full px-6 py-4 text-lg rounded-2xl border-2 border-indigo-100 bg-white/80 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 pr-12"
                     required
                   />
-                  <ArrowRight className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-hover:text-blue-500 transition-colors duration-200" />
+                  <Play className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-indigo-400 group-hover:text-indigo-600 transition-colors duration-300" />
                 </div>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full inline-flex justify-center items-center px-6 py-4 rounded-xl text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-lg font-medium shadow-lg hover:shadow-xl"
+                  className="w-full inline-flex justify-center items-center px-6 py-4 rounded-2xl text-white bg-gradient-to-r from-indigo-600 via-purple-600 to-amber-600 hover:from-indigo-700 hover:via-purple-700 hover:to-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-lg font-medium shadow-xl hover:shadow-2xl"
                 >
                   {loading ? (
                     <>
@@ -125,14 +119,27 @@ const VideoSummarizer = () => {
             </div>
 
             {/* Feature Cards */}
-            <div className="grid md:grid-cols-2 gap-6 mt-12">
-              <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-gray-100 p-8 hover:shadow-xl transition-all duration-300">
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Free Access</h3>
-                <p className="text-gray-600 leading-relaxed">Experience intelligent video summarization instantly</p>
+            <div className="grid md:grid-cols-3 gap-6 mt-12">
+              <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-indigo-50 p-6 hover:shadow-2xl transition-all duration-300">
+                <div className="rounded-xl bg-indigo-50 p-3 inline-block mb-4">
+                  <Zap className="h-6 w-6 text-indigo-600" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Lightning Fast</h3>
+                <p className="text-gray-600">Instant analysis powered by cutting-edge AI</p>
               </div>
-              <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-gray-100 p-8 hover:shadow-xl transition-all duration-300">
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Lightning Fast</h3>
-                <p className="text-gray-600 leading-relaxed">Your free all-in-one AI video analysis tool</p>
+              <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-purple-50 p-6 hover:shadow-2xl transition-all duration-300">
+                <div className="rounded-xl bg-purple-50 p-3 inline-block mb-4">
+                  <Sparkles className="h-6 w-6 text-purple-600" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Smart Insights</h3>
+                <p className="text-gray-600">Advanced comprehension of video content</p>
+              </div>
+              <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-amber-50 p-6 hover:shadow-2xl transition-all duration-300">
+                <div className="rounded-xl bg-amber-50 p-3 inline-block mb-4">
+                  <FileText className="h-6 w-6 text-amber-600" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Detailed Summary</h3>
+                <p className="text-gray-600">Comprehensive yet concise breakdowns</p>
               </div>
             </div>
           </div>
@@ -148,25 +155,29 @@ const VideoSummarizer = () => {
 
           {summary && (
             <div className="max-w-3xl mx-auto mt-12">
-              <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-100 p-8">
-                <h2 className="text-2xl font-semibold mb-6 text-gray-900">Video Summary</h2>
+              <div className="bg-white/90 backdrop-blur-2xl rounded-3xl shadow-2xl border border-indigo-50 p-8">
+                <h2 className="text-2xl font-semibold mb-6 text-gray-900 flex items-center gap-2">
+                  <FileText className="h-6 w-6 text-indigo-600" />
+                  Video Summary
+                </h2>
                 <div className="space-y-4">
-                  {summary.split('\n').map((point, index) => (
-                    <div key={index} className="flex gap-4 group">
-                      <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-blue-50 text-blue-600 font-medium group-hover:bg-blue-100 transition-colors duration-200">
-                        {index + 1}
-                      </span>
-                      <p className="text-gray-700 leading-relaxed flex-1">
-                        {point}
-                      </p>
-                    </div>
-                  ))}
+                  <ol className="list-decimal list-inside space-y-4">
+                    {summary.split('\n').map((point, index) => (
+                      <li key={index} className="group">
+                        <div className="inline-block ml-2">
+                          <p className="text-gray-700 leading-relaxed">
+                            {point.replace(/^\d+[\s.-]*/, '').trim()}
+                          </p>
+                        </div>
+                      </li>
+                    ))}
+                  </ol>
                 </div>
               </div>
             </div>
           )}
         </div>
-      </div>
+      </main>
     </div>
   );
 };
