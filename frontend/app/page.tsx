@@ -17,8 +17,8 @@ const VideoSummarizer = () => {
     setSummary('');
     
     // Get the base URL from environment variable or use relative path
-    const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL 
-      ? `${process.env.NEXT_PUBLIC_BACKEND_URL.replace(/\/+$/, '')}/api/summarize`
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL 
+      ? `${process.env.NEXT_PUBLIC_API_URL.replace(/\/+$/, '')}/api/summarize`
       : '/api/summarize';
     
     console.log('Sending request to:', baseUrl);

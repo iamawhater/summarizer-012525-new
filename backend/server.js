@@ -15,7 +15,7 @@ const __dirname = dirname(__filename);
 
 const corsOptions = {
   origin: [
-    process.env.FRONTEND_URL || 'https://summarizer-012525-new-8fev.vercel.app',
+    process.env.FRONTEND_URL || 'https://summarizer-012525-new-1b9u-h9zw0dctc-iamawhaters-projects.vercel.app',
     'http://localhost:3000'
   ],
   methods: ['GET', 'POST', 'OPTIONS'],
@@ -27,9 +27,9 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Middleware
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 
-app.use(cors())
+//app.use(cors())
 
 app.use(express.json());
 
