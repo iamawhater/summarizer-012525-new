@@ -19,7 +19,7 @@ const VideoSummarizer = () => {
     setSummary('');
 
     try {
-      const response = await fetch(`${API_URL}/summarize`, {
+      const response = await fetch(`${NEXT_PUBLIC_API_URL}/summarize`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
