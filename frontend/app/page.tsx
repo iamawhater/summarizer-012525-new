@@ -79,7 +79,7 @@ const VideoSummarizer = () => {
         <div className="max-w-7xl mx-auto py-4 px-4">
           <div className="flex items-center justify-center gap-3 text-sm font-medium">
             <Star className="h-5 w-5 text-yellow-300 animate-spin-slow" />
-            <span className="text-base">Brought to you by SentimentAI. Created by Alok Dahal</span>
+            <span className="text-base">Brought to you by SentimentAI. Created by Alok Dahal © 2025 </span>
           </div>
         </div>
       </div>
@@ -196,7 +196,7 @@ const VideoSummarizer = () => {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-sm text-gray-600">
             <div className="flex items-center gap-2">
               <Mail className="h-4 w-4 text-indigo-600" />
-              <span>alokdahal5@gmail.com</span>
+              <span>sentiment2025@gmail.com</span>
             </div>
             <div className="flex items-center gap-2">
               <Phone className="h-4 w-4 text-purple-600" />
