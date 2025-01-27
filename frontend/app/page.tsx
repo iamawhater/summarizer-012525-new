@@ -9,6 +9,10 @@ const VideoSummarizer = () => {
   const [loading, setLoading] = useState(false);
   const [summary, setSummary] = useState('');
   const [error, setError] = useState('');
+  const [qaMode, setQAMode] = useState(false); // Tracks if Q/A mode is active
+  const [question, setQuestion] = useState(''); // Stores the user's question
+  const [answer, setAnswer] = useState(''); // Stores the AI's answer
+  const [questionCount, setQuestionCount] = useState(0); // Tracks the number of questions asked
   const summaryRef = useRef<HTMLDivElement>(null);
 
   // Function to validate YouTube URL
@@ -19,7 +23,7 @@ const VideoSummarizer = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     // Validate URL before submission
     if (!isValidYouTubeUrl(url)) {
       setError('Please enter a valid YouTube URL');
@@ -29,11 +33,12 @@ const VideoSummarizer = () => {
     setLoading(true);
     setError('');
     setSummary('');
-    
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL 
+    setQAMode(false); // Reset Q/A mode when a new summary is generated
+
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL
       ? `${process.env.NEXT_PUBLIC_API_URL.replace(/\/+$/, '')}/api/summarize`
       : '/api/summarize';
-    
+
     try {
       const response = await fetch(baseUrl, {
         method: 'POST',
@@ -42,12 +47,12 @@ const VideoSummarizer = () => {
         },
         body: JSON.stringify({ url }),
       });
-      
+
       const data = await response.json();
-      
+
       if (!response.ok) {
         let errorMessage = data.error || `Failed to summarize video (${response.status})`;
-        
+
         if (response.status === 500) {
           errorMessage = 'Server is currently experiencing issues. Please try again in a few minutes. If the problem persists, ensure your YouTube video URL is correct and accessible.';
         } else if (response.status === 404) {
@@ -55,11 +60,57 @@ const VideoSummarizer = () => {
         } else if (response.status === 429) {
           errorMessage = 'Too many requests. Please wait a moment before trying again.';
         }
-        
+
         throw new Error(errorMessage);
       }
 
       setSummary(data.summary);
+      setQAMode(true); // Enable Q/A mode after summary is generated
+    } catch (error: unknown) {
+      console.error('Error details:', error);
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('An unknown error occurred');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleQuestionSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (questionCount >= 6) {
+      setError('You have reached the maximum number of questions (6) for this session.');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+
+    try {
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL
+        ? `${process.env.NEXT_PUBLIC_API_URL.replace(/\/+$/, '')}/api/ask`
+        : '/api/ask';
+
+      const response = await fetch(baseUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ question, context: summary }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to get an answer');
+      }
+
+      setAnswer(data.answer);
+      setQuestionCount((prev) => prev + 1); // Increment question count
+      setQuestion(''); // Clear the input field
     } catch (error: unknown) {
       console.error('Error details:', error);
       if (error instanceof Error) {
@@ -182,18 +233,70 @@ const VideoSummarizer = () => {
                   Video Summary
                 </h2>
                 <div className="space-y-4">
-                  <div className="space-y-4">
-                    {summary.split('\n').map((point, index) => (
-                      <div key={index} className="group">
-                        <div className="inline-block ml-2">
-                          <p className="text-gray-700 leading-relaxed">
-                            {point.replace(/^\d+[\s.-]*/, '').trim()}
-                          </p>
-                        </div>
+                  {summary.split('\n').map((point, index) => (
+                    <div key={index} className="group">
+                      <div className="inline-block ml-2">
+                        <p className="text-gray-700 leading-relaxed">
+                          {point.replace(/^\d+[\s.-]*/, '').trim()}
+                        </p>
                       </div>
-                    ))}
-                  </div>
+                    </div>
+                  ))}
                 </div>
+              </div>
+            </div>
+          )}
+
+          {/* Q/A Section */}
+          {qaMode && (
+            <div className="max-w-3xl mx-auto mt-8 sm:mt-12">
+              <div className="bg-white/90 backdrop-blur-2xl rounded-3xl shadow-2xl border border-indigo-50 p-6 sm:p-8">
+                <h2 className="text-2xl font-semibold mb-6 text-gray-900 flex items-center gap-2">
+                  <Sparkles className="h-6 w-6 text-purple-600" />
+                  Have More Questions?
+                </h2>
+                <form onSubmit={handleQuestionSubmit} className="space-y-4">
+                  <div className="relative group">
+                    <input
+                      type="text"
+                      value={question}
+                      onChange={(e) => setQuestion(e.target.value)}
+                      placeholder="Ask a question about the video..."
+                      className="w-full px-4 sm:px-6 py-3 sm:py-4 text-base sm:text-lg rounded-2xl border-2 border-indigo-100 bg-white/80 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 pr-12"
+                      required
+                      disabled={questionCount >= 6}
+                    />
+                    <Sparkles className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-purple-400 group-hover:text-purple-600 transition-colors duration-300" />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={loading || questionCount >= 6}
+                    className="w-full inline-flex justify-center items-center px-4 sm:px-6 py-3 sm:py-4 rounded-2xl text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-base sm:text-lg font-medium shadow-xl hover:shadow-2xl"
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="animate-spin -ml-1 mr-3 h-5 w-5" />
+                        Processing...
+                      </>
+                    ) : (
+                      'Ask Question'
+                    )}
+                  </button>
+                  <p className="text-sm text-gray-500 text-center">
+                    {questionCount < 6
+                      ? `You can ask ${6 - questionCount} more questions.`
+                      : 'You have reached the maximum number of questions (6) for this session.'}
+                  </p>
+                </form>
+
+                {answer && (
+                  <div className="mt-6">
+                    <h3 className="text-xl font-semibold mb-4 text-gray-900">Answer</h3>
+                    <div className="bg-indigo-50/50 p-4 rounded-xl">
+                      <p className="text-gray-700 leading-relaxed">{answer}</p>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}
