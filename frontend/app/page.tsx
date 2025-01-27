@@ -17,7 +17,7 @@ const VideoSummarizer = () => {
 
   // Function to validate YouTube URL
   const isValidYouTubeUrl = (url: string): boolean => {
-    const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/).+/;
+    const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|shorts\/)|youtu\.be\/).+/;
     return youtubeRegex.test(url);
   };
 
