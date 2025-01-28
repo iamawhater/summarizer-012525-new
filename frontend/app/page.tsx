@@ -33,6 +33,15 @@ const VideoSummarizer = () => {
         return false;
       }
       
+      // Extract video ID from query parameters for mobile URLs
+      const searchParams = urlObj.searchParams;
+      const videoId = searchParams.get('v');
+      
+      // If we have a valid video ID from query parameters, it's valid
+      if (videoId) {
+        return true;
+      }
+      
       // Check if it has a valid path pattern
       const validPaths = ['/watch', '/shorts', '/v/', '/embed/'];
       const path = urlObj.pathname.toLowerCase();
