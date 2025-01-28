@@ -17,9 +17,28 @@ const VideoSummarizer = () => {
 
   // Function to validate YouTube URL
   const isValidYouTubeUrl = (url: string): boolean => {
-    const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|shorts\/)|youtu\.be\/).+/;
-    return youtubeRegex.test(url);
-  };
+    try {
+      new URL(url);
+    } catch {
+      try {
+        new URL(`https://${url}`);
+      } catch {
+        return false;
+      }
+    }
+    
+    const normalizedUrl = url.toLowerCase();
+    const validPatterns = [
+      'youtube.com/watch',
+      'youtube.com/shorts',
+      'youtu.be/',
+      'm.youtube.com',
+      'youtube.com/v/',
+      'youtube.com/embed/'
+    ];
+    
+    return validPatterns.some(pattern => normalizedUrl.includes(pattern));
+};
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
