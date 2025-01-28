@@ -17,28 +17,36 @@ const VideoSummarizer = () => {
 
   // Function to validate YouTube URL
   const isValidYouTubeUrl = (url: string): boolean => {
-    try {
-      new URL(url);
-    } catch {
-      try {
-        new URL(`https://${url}`);
-      } catch {
-        return false;
-      }
+    let workingUrl = url;
+    
+    // Handle cases where the URL might not have a protocol
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      workingUrl = 'https://' + url;
     }
     
-    const normalizedUrl = url.toLowerCase();
-    const validPatterns = [
-      'youtube.com/watch',
-      'youtube.com/shorts',
-      'youtu.be/',
-      'm.youtube.com',
-      'youtube.com/v/',
-      'youtube.com/embed/'
-    ];
-    
-    return validPatterns.some(pattern => normalizedUrl.includes(pattern));
-};
+    try {
+      const urlObj = new URL(workingUrl);
+      const hostname = urlObj.hostname.toLowerCase();
+      
+      // Check if it's a valid YouTube domain
+      if (!['youtube.com', 'www.youtube.com', 'm.youtube.com', 'youtu.be'].includes(hostname)) {
+        return false;
+      }
+      
+      // Check if it has a valid path pattern
+      const validPaths = ['/watch', '/shorts', '/v/', '/embed/'];
+      const path = urlObj.pathname.toLowerCase();
+      
+      // Special case for youtu.be
+      if (hostname === 'youtu.be' && path.length > 1) {
+        return true;
+      }
+      
+      return validPaths.some(validPath => path.startsWith(validPath));
+    } catch {
+      return false;
+    }
+  };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
